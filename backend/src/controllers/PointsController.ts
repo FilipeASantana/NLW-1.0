@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import knex from "../database/connection";
+import knex from '../database/connection';
 
 class PointsController {
     async index(request: Request, response: Response) {
@@ -20,7 +20,7 @@ class PointsController {
         const serializedPoints = points.map(point => {
             return {
                 ...point,
-                image_url: `http://192.168.0.109:3333/uploads/${point.image}`
+                image_url: `http://192.168.0.109:3333/uploads/${point.image}`,
             };
         });
 
@@ -38,7 +38,7 @@ class PointsController {
 
         const serializedPoints = {
             ...point,
-            image_url: `http://192.168.0.109:3333/uploads/${point.image}`
+            image_url: `http://192.168.0.109:3333/uploads/${point.image}`,
         };
 
         const items = await knex('items')
@@ -50,16 +50,7 @@ class PointsController {
     }
 
     async create(request: Request, response: Response) {
-        const {
-            name,
-            email,
-            whatsapp,
-            latitude,
-            longitude,
-            city,
-            uf,
-            items
-        } = request.body;
+        const {name, email, whatsapp, latitude, longitude, city, uf, items} = request.body;
 
         const trx = await knex.transaction();
 
@@ -71,7 +62,7 @@ class PointsController {
             latitude,
             longitude,
             city,
-            uf
+            uf,
         };
 
         const insertedIds = await trx('points').insert(point);
@@ -82,11 +73,11 @@ class PointsController {
             .split(',')
             .map((item: string) => Number(item.trim()))
             .map((item_id: number) => {
-            return {
-                item_id,
-                point_id
-            };
-        });
+                return {
+                    item_id,
+                    point_id,
+                };
+            });
 
         await trx('point_items').insert(pointItems);
 
@@ -94,7 +85,7 @@ class PointsController {
 
         return response.json({
             id: point_id,
-            ...point
+            ...point,
         });
     }
 }

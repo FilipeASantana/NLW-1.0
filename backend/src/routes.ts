@@ -1,11 +1,12 @@
 import express, {response} from 'express';
 import {celebrate, Joi} from 'celebrate';
 
+import multer from 'multer';
 import PointsController from './controllers/PointsController';
 import ItemsController from './controllers/ItemsController';
 
-import multer from 'multer';
 import multerConfig from './config/multer';
+
 const upload = multer(multerConfig);
 
 const pointsController = new PointsController();
@@ -28,12 +29,13 @@ routes.post(
                 city: Joi.string().required(),
                 uf: Joi.string().required().max(2),
                 items: Joi.string().required(),
-            })
-        }, {
-            abortEarly: false
-        }
+            }),
+        },
+        {
+            abortEarly: false,
+        },
     ),
-    pointsController.create
+    pointsController.create,
 );
 
 routes.get('/points', pointsController.index);
